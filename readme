@@ -47,7 +47,6 @@ Create PostgreSQL databases:
 
 ```sql
 CREATE DATABASE booking_api;
-CREATE DATABASE booking_api_test;
 ```
 
 ### 3. Environment Configuration
