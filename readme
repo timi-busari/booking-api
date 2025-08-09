@@ -1,0 +1,248 @@
+# Booking API - TypeScript + TypeORM Implementation
+
+A robust property rental booking API built with TypeScript, Node.js, Express, and TypeORM with PostgreSQL.
+
+## 🚀 Features
+
+- **Property Management**: List properties with filtering and pagination
+- **Availability System**: Check property availability with intelligent date range calculations
+- **Booking Management**: Create, update, and cancel bookings with comprehensive validation
+- **Type Safety**: Full TypeScript implementation with compile-time type checking
+- **Database**: PostgreSQL with TypeORM for robust data management
+- **Validation**: Multi-layer validation using class-validator and custom business logic
+- **API Documentation**: Auto-generated Swagger/OpenAPI documentation
+- **Testing**: Comprehensive unit and integration tests with Jest
+- **Security**: Rate limiting, CORS, Helmet security headers
+
+## 🛠 Tech Stack
+
+- **Runtime**: Node.js with TypeScript
+- **Framework**: Express.js
+- **Database**: PostgreSQL
+- **ORM**: TypeORM
+- **Validation**: class-validator, class-transformer, Joi
+- **Testing**: Jest, Supertest
+- **Documentation**: Swagger/OpenAPI
+- **Security**: Helmet, CORS, Rate Limiting
+
+## 📋 Prerequisites
+
+- Node.js (v18 or higher)
+- PostgreSQL (v12 or higher)
+- npm or yarn
+
+## 🔧 Installation & Setup
+
+### 1. Clone and Install
+
+```bash
+git clone <repository-url>
+cd booking-api-typescript
+npm install
+```
+
+### 2. Database Setup
+
+Create PostgreSQL databases:
+
+```sql
+CREATE DATABASE booking_api;
+CREATE DATABASE booking_api_test;
+```
+
+### 3. Environment Configuration
+
+Create `.env` file:
+
+```env
+PORT=3000
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=booking_api
+DB_USER=postgres
+DB_PASSWORD=your_password
+```
+
+
+### 4. Build and Run
+
+```bash
+# Build TypeScript
+npm run build
+
+# Run database migrations (TypeORM will auto-sync in development)
+# In production, you would run: npm run migration:run
+
+# Seed sample data
+npm run seed
+
+# Start development server
+npm run dev
+
+# Or start production server
+npm start
+```
+
+## 📚 API Documentation
+
+Once the server is running, access:
+- **API Documentation**: http://localhost:3000/api-docs
+- **Health Check**: http://localhost:3000/health
+
+## 🔗 API Endpoints
+
+### Properties
+
+| Method | Endpoint | Description | Parameters |
+|--------|----------|-------------|------------|
+| GET | `/api/v1/properties` | List all properties | `page`, `limit`, `available_from`, `available_to` |
+| GET | `/api/v1/properties/:id/availability` | Get property availability | - |
+
+### Bookings
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/api/v1/bookings` | Create new booking |
+| PUT | `/api/v1/bookings/:id` | Update existing booking |
+| DELETE | `/api/v1/bookings/:id` | Cancel booking |
+
+## 🧪 Testing
+
+### Run Tests
+
+```bash
+# Run all tests
+npm test
+
+# Run tests in watch mode
+npm run test:watch
+
+# Run specific test file
+npm test -- BookingService.test.ts
+```
+
+### Example Test Commands
+
+```bash
+# Test property listing with pagination
+curl "http://localhost:3000/api/v1/properties?page=1&limit=5"
+
+# Test property availability
+curl "http://localhost:3000/api/v1/properties/1/availability"
+
+# Create a booking
+curl -X POST http://localhost:3000/api/v1/bookings \
+  -H "Content-Type: application/json" \
+  -d '{
+    "property_id": 1,
+    "user_name": "John Doe",
+    "start_date": "2024-03-01",
+    "end_date": "2024-03-05"
+  }'
+
+# Update a booking
+curl -X PUT http://localhost:3000/api/v1/bookings/1 \
+  -H "Content-Type: application/json" \
+  -d '{
+    "user_name": "Jane Smith"
+  }'
+
+# Cancel a booking
+curl -X DELETE http://localhost:3000/api/v1/bookings/1
+```
+
+## 🏗 Project Structure
+
+```
+src/
+├── config/          # Database configuration
+├── entities/        # TypeORM entities (models)
+├── dto/            # Data Transfer Objects
+├── services/       # Business logic layer
+├── routes/         # API route handlers
+├── middleware/     # Custom middleware
+├── types/          # TypeScript type definitions
+├── seeds/          # Database seeding
+├── app.ts          # Express app configuration
+└── server.ts       # Server entry point
+
+__tests__/          # Test files
+├── services/       # Service layer tests
+├── routes/         # API endpoint tests
+└── setup.ts        # Test configuration
+```
+
+## 🔒 Security Features
+
+- **Rate Limiting**: 100 requests per 15 minutes per IP
+- **CORS**: Configurable cross-origin resource sharing
+- **Helmet**: Security headers for common vulnerabilities
+- **Input Validation**: Multi-layer validation preventing injection attacks
+- **Type Safety**: TypeScript prevents runtime type errors
+
+## 📊 Business Logic
+
+### Booking Validation
+
+1. **Date Validation**: End date must be after start date
+2. **Availability Check**: Dates must be within property availability window
+3. **Overlap Prevention**: No overlapping bookings for the same property
+4. **Property Existence**: Property must exist before booking
+
+### Availability Calculation
+
+The system intelligently calculates available date ranges by:
+1. Fetching all existing bookings for a property
+2. Sorting bookings chronologically
+3. Finding gaps between bookings
+4. Returning continuous available date ranges
+
+
+### Build and Deploy
+
+```bash
+# Build for production
+npm run build
+
+# Run database migrations
+npm run migration:run
+
+# Start production server
+npm start
+```
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📝 Design Decisions & Assumptions
+
+### Why TypeScript + TypeORM?
+
+1. **Type Safety**: Compile-time error detection reduces runtime bugs
+2. **Developer Experience**: Better IDE support, refactoring, and code navigation
+3. **Enterprise Ready**: More maintainable and scalable for large applications
+4. **Modern Patterns**: Decorators, dependency injection, and clean architecture
+
+### Architecture Decisions
+
+1. **Service Layer Pattern**: Business logic separated from route handlers
+2. **DTO Pattern**: Input validation and transformation with class-validator
+3. **Repository Pattern**: TypeORM repositories abstract database operations
+4. **Entity Relationships**: Proper foreign keys and cascading operations
+
+### Assumptions Made
+
+1. **Date Format**: All dates use ISO 8601 format (YYYY-MM-DD)
+2. **User Authentication**: Not implemented (assumed external system)
+3. **Payment Processing**: Not included in scope
+4. **Property Ownership**: Single owner per property assumed
+5. **Booking Modification**: Full booking updates allowed before check-in
+
+## 📄 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
