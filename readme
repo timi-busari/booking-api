@@ -62,7 +62,6 @@ DB_USER=postgres
 DB_PASSWORD=your_password
 ```
 
-
 ### 4. Build and Run
 
 ```bash
@@ -196,8 +195,7 @@ The system intelligently calculates available date ranges by:
 3. Finding gaps between bookings
 4. Returning continuous available date ranges
 
-
-### Build and Deploy
+## 🚀 Build and Deploy
 
 ```bash
 # Build for production
